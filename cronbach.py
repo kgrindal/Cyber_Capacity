@@ -16,6 +16,23 @@ oxford_index = pd.read_csv("Raw_Data/oxford_index.csv")
 # Harvard
 ########################
 
+# Coding categories is based on Code Book linked to here: https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/LT55JY/HQMNOH&version=3.0
+
+capabilities = harvard_index[['score_capabilities', 'score_surveillance', 'score_defense', 'score_control', 'score_intelligence', 'score_commercial', 'score_offense', 'score_norms']]
+b = pg.cronbach_alpha(data=capabilities)
+b
+
+# score_overall	is leftover?
+intent = harvard_index[['score_intent', 'intent_surveillance','intent_defense','intent_control', 'intent_intelligence', 'intent_commercial','intent_offense','intent_norms']]
+c = pg.cronbach_alpha(data=intent)
+c
+
+#Cyber Power Scores: score_captint capint_surveillance	capint_defense	capint_control	capint_intelligence	capint_commercial	capint_offense	capint_norms
+#Capability Indicators: 
+#laws	web_alexa	news_alexa	removal_google	freedom_net	infocomm_imp	patent_application	patent_app_capita	broadband_speed	mobile_speed	ecommerce	ecommerce_capita	state_attack	attack_objective	attack_surveillance	attack_control	attack_intelligence	attack_commercial	attack_offense	tech_firm	tech_export	human_capital	cybermil_people	cyber_firm	computer_infection	mobile_infection	socials_use	internet_use	surveillance_firm	shodan	military_strategy	cyber_command	CERTS	multi_agreement	bilat_agreement	softpower	ITU
+
+
+# Intent Scores Construction
 
 
 ########################
