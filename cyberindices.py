@@ -42,7 +42,28 @@ index_tots.head()
 ## Create Histograms of scores
 ##########################
 
+# Plot the histogram and get the bar objects
+bars = plt.hist(index_tots["GCIv4_Score"], 20)
 
+# Add counts on top of each bar using the bar objects
+for i, bar in enumerate(bars[2]):  # bars[2] contains the bar objects
+    height = bars[0][i]  # bars[0] contains the bar heights
+    plt.text(bar.get_x() + bar.get_width()/2., bar.get_height(),
+             f'{int(height)}',
+             ha='center', va='bottom')
+
+plt.xlabel('GCIv4 Score')
+plt.ylabel('Country Frequency')
+plt.show() # plots 194 countries
+
+plt.hist(index_tots["GCIv4_Score"],20)
+plt.xlabel('GCIv4 Score')
+plt.ylabel('Country Frequency')
+plt.show()
+
+plt.hist(index_tots["Oxford_Score"])
+plt.hist(index_tots["MIT_Score"])
+plt.hist(index_tots["Harvard_Score"])
 
 ##########################
 ## Create Correlation Plots Between Indicies

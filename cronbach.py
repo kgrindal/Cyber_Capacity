@@ -89,6 +89,16 @@ print(alpha_table)
 gciv5_cat = gciv5_index[['Legal Measures','Technical Measures','Organization Measures','Capacity Development','Cooperation Measures']]
 pg.cronbach_alpha(data=gciv5_cat)
 
+
+
+#FREQ,FREQ_LABEL,REF_AREA,REF_AREA_LABEL,
+# INDICATOR,INDICATOR_LABEL,UNIT_MEASURE,
+# UNIT_MEASURE_LABEL,AGG_METHOD,AGG_METHOD_LABEL,
+# DATABASE_ID,DATABASE_ID_LABEL,UNIT_MULT,
+# UNIT_MULT_LABEL,OBS_STATUS,OBS_STATUS_LABEL,
+# OBS_CONF,OBS_CONF_LABEL,2020,2024
+
+
 ########################
 # MIT
 ########################
