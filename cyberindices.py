@@ -42,34 +42,57 @@ index_tots.head()
 ## Create Histograms of scores
 ##########################
 
-# Plot the histogram and get the bar objects
-bars = plt.hist(index_tots["GCIv4_Score"], 20)
+def plot_histogram(data_column, title):
+    plt.figure(figsize=(6, 4))
+    bars = plt.hist(index_tots[data_column], 20)
+    
+    # Add counts on top of each bar
+    for i, bar in enumerate(bars[2]):
+        height = bars[0][i]
+        plt.text(bar.get_x() + bar.get_width()/2., bar.get_height(),
+                 f'{int(height)}',
+                 ha='center', va='bottom')
+    
+    plt.xlabel('Score')
+    plt.ylabel('Country Frequency')
+    plt.title(title)
+    
+plot_histogram("GCIv4_Score", "GCIv4 Score Distribution")
+plt.savefig('jpeg/gciv4_freq.jpeg')
 
-# Add counts on top of each bar using the bar objects
-for i, bar in enumerate(bars[2]):  # bars[2] contains the bar objects
-    height = bars[0][i]  # bars[0] contains the bar heights
-    plt.text(bar.get_x() + bar.get_width()/2., bar.get_height(),
-             f'{int(height)}',
-             ha='center', va='bottom')
+def plot_histogram(data_column, title):
+    plt.figure(figsize=(6, 4))
+    bars = plt.hist(index_tots[data_column], 8)
+    
+    # Add counts on top of each bar
+    for i, bar in enumerate(bars[2]):
+        height = bars[0][i]
+        plt.text(bar.get_x() + bar.get_width()/2., bar.get_height(),
+                 f'{int(height)}',
+                 ha='center', va='bottom')
+    
+    plt.xlabel('Score')
+    plt.ylabel('Country Frequency')
+    plt.title(title)
 
-plt.xlabel('GCIv4 Score')
-plt.ylabel('Country Frequency')
-plt.show() # plots 194 countries
+plot_histogram("MIT_Score", "MIT Score Distribution")
+plt.savefig('jpeg/mit_freq.jpeg')
 
-plt.hist(index_tots["GCIv4_Score"],20)
-plt.xlabel('GCIv4 Score')
-plt.ylabel('Country Frequency')
-plt.show()
+plot_histogram("Oxford_Score", "Oxford Score Distribution")
+plt.savefig('jpeg/oxford_freq.jpeg')
 
-plt.hist(index_tots["Oxford_Score"])
-plt.hist(index_tots["MIT_Score"])
-plt.hist(index_tots["Harvard_Score"])
+plot_histogram("Harvard_Score", "Harvard Score Distribution")
+plt.savefig('jpeg/harvard_freq.jpeg')
+
 
 ##########################
-## Create Correlation Plots Between Indicies
+## Create Correlation Plots Between Indicies - TEST
 ##########################
 
-#clean_data = index_tots.dropna()
+
+def create_clean_data(df, var1, var2):
+    """Filter DataFrame to keep only complete rows for two variables"""
+    return df.dropna(subset=[var1, var2])
 
 # Create Correlation Plots Between Indicies
 def add_trendline(x, y, ax):
@@ -87,44 +110,64 @@ def add_trendline(x, y, ax):
     ax.plot(x_vals, y_vals, 'r-', linewidth=2, label='Trend Line')
 
 
-# Create scatterplot with a label on every point
-plt.figure(figsize=(10, 6))
-plt.scatter(index_tots['MIT_Score'], index_tots['GCIv4_Score'])
-for i, text in enumerate(index_tots['Country']):
-    plt.annotate(text, (index_tots['GCIv4_Score'].iloc[i], index_tots['MIT_Score'].iloc[i]))
-#add_trendline(index_tots['MIT_Score'], index_tots['GCIv4_Score'], plt.gca())
-plt.title('Correlation between GCI and MIT Index')
-plt.xlabel('MIT Score')
-plt.ylabel('GCI Score')
-plt.show()
+def plot_correlation(df, var_x, var_y, title):
+    """Plot a correlation scatterplot with trendline and country labels"""
+    plt.figure(figsize=(6, 4))
+    
+    # Filter data
+    clean_data = create_clean_data(df, var_x, var_y)
+    
+    # Create scatterplot
+    scatter = plt.scatter(clean_data[var_x], clean_data[var_y], 
+                         alpha=0.5, s=40, c='blue', edgecolors='black')
+    
+    # Add trendline
+    add_trendline(clean_data[var_x], clean_data[var_y], plt.gca())
+    
+    # Add country labels with offset to prevent overlap
+    indexer = np.arange(len(clean_data))
+    for i, (x_val, y_val, country) in enumerate(
+        zip(clean_data[var_x], clean_data[var_y], clean_data['Country'])
+    ):
+        offset_x = .15
+        offset_y = .2
+        # # Calculate horizontal offset based on position
+        # if indexer[i] < len(indexer) / 2:
+        #     offset_x = -0.15
+        # else:
+        #     offset_x = +0.15
 
+        plt.annotate(
+            text=country,
+            xy=(x_val + offset_x, y_val + offset_y),
+            ha='left' if offset_x == -0.15 else 'right',
+            va='bottom',
+            fontsize=8,
+            color='black'
+        )
+    
+    plt.title(title)
+    plt.xlabel(var_x)
+    plt.ylabel(var_y)
+    plt.tight_layout()
+    plt.show()
 
+# Example usage:
+plot_correlation(index_tots, 
+                 'MIT_Score', 
+                 'GCIv4_Score',
+                 'Correlation between MIT and GCIv4 Index')
 
+plot_correlation(index_tots,
+                 'MIT_Score',
+                 'Harvard_Score',
+                 'Correlation between MIT and Harvard Index')
 
-# Create scatterplot with a label on every point
-plt.figure(figsize=(10, 6))
-plt.scatter(index_tots['MIT_Score'], index_tots['Harvard_Score'])
-for i, text in enumerate(index_tots['Country']):
-    plt.annotate(text, (index_tots['MIT_Score'].iloc[i], index_tots['Harvard_Score'].iloc[i]))
-#add_trendline(index_tots['MIT_Score'], index_tots['Harvard_Score'], plt.gca())
-plt.title('Correlation between MIT and Harvard Index')
-plt.xlabel('MIT Score')
-plt.ylabel('Harvard Score')
-plt.show()
+plot_correlation(index_tots,
+                 'Oxford_Score',
+                 'GCIv4_Score',
+                 'Correlation between Oxford and GCI Index')
 
-corr, _ = pearsonr(index_tots['MIT_Score'], index_tots['Harvard_Score'])
-print('Correlation:', corr)
-
-
-# Create scatterplot with a label on every point
-plt.figure(figsize=(10, 6))
-plt.scatter(index_tots['Oxford_Score'], index_tots['GCIv4_Score'])
-for i, text in enumerate(index_tots['Country']):
-    plt.annotate(text, (index_tots['Oxford_Score'].iloc[i], index_tots['GCIv4_Score'].iloc[i]))
-plt.title('Correlation between Oxford and GCI Index')
-plt.xlabel('Oxford Score')
-plt.ylabel('GCI Score')
-plt.show()
 
 ################################
 ## Initial Regression on GCIv4
