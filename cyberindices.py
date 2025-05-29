@@ -55,9 +55,10 @@ def plot_histogram(data_column, title):
     
     plt.xlabel('Score')
     plt.ylabel('Country Frequency')
-    plt.title(title)
+    #plt.title(title)
     
 plot_histogram("GCIv4_Score", "GCIv4 Score Distribution")
+plt.tight_layout() 
 plt.savefig('jpeg/gciv4_freq.jpeg')
 
 def plot_histogram(data_column, title):
@@ -73,15 +74,18 @@ def plot_histogram(data_column, title):
     
     plt.xlabel('Score')
     plt.ylabel('Country Frequency')
-    plt.title(title)
+    #plt.title(title)
 
 plot_histogram("MIT_Score", "MIT Score Distribution")
+plt.tight_layout() 
 plt.savefig('jpeg/mit_freq.jpeg')
 
 plot_histogram("Oxford_Score", "Oxford Score Distribution")
+plt.tight_layout() 
 plt.savefig('jpeg/oxford_freq.jpeg')
 
 plot_histogram("Harvard_Score", "Harvard Score Distribution")
+plt.tight_layout() 
 plt.savefig('jpeg/harvard_freq.jpeg')
 
 
@@ -150,7 +154,11 @@ def plot_correlation(df, var_x, var_y, title):
     plt.xlabel(var_x)
     plt.ylabel(var_y)
     plt.tight_layout()
-    plt.show()
+    
+    # Save the plot with filename in format "corr_varxvary.jpeg"
+    filename = f"jpeg/corr_{var_x.replace(' ', '_')}_{var_y.replace(' ', '_')}.jpeg"
+    plt.savefig(filename, bbox_inches='tight')
+    plt.close()  # Close the figure to free up memory
 
 # Example usage:
 plot_correlation(index_tots, 
@@ -167,6 +175,11 @@ plot_correlation(index_tots,
                  'Oxford_Score',
                  'GCIv4_Score',
                  'Correlation between Oxford and GCI Index')
+
+plot_correlation(index_tots,
+                 'Harvard_Score',
+                 'GCIv4_Score',
+                 'Correlation between Harvard and GCI Index')
 
 
 ################################
